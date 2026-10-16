@@ -259,12 +259,6 @@ export default function App() {
   const [listPropertyForm, setListPropertyForm] = useState({ title: '', location: '', price: '', type: 'House For Sale', contactName: '', phone: '' });
   const [listPropertySubmitted, setListPropertySubmitted] = useState(false);
 
-  // Auth / OTP Modal State
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [otpSent, setOtpSent] = useState(false);
-  const [userPhone, setUserPhone] = useState('');
-  const [userRole, setUserRole] = useState(null);
-
   // Service Booking Form State
   const [bookingDetails, setBookingDetails] = useState({ name: '', email: '', phone: '', note: '' });
   const [bookingSubmitted, setBookingSubmitted] = useState(false);
@@ -373,7 +367,6 @@ export default function App() {
     ]);
   };
 
-  // Conversational Smart AI Responses
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (!chatInput.trim()) return;
@@ -528,13 +521,6 @@ export default function App() {
             </button>
 
             <button
-              onClick={() => setAuthModalOpen(true)}
-              className="px-3.5 py-2 bg-slate-900 border border-slate-800 text-slate-300 hover:text-amber-400 font-bold rounded-xl text-xs sm:text-sm"
-            >
-              {userRole ? `Account (${userRole})` : 'Sign In'}
-            </button>
-
-            <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-amber-400"
             >
@@ -614,8 +600,10 @@ export default function App() {
                 </p>
               </div>
 
-              <div className="bg-slate-900/80 border border-slate-700/60 rounded-2xl p-4 sm:p-6 backdrop-blur-xl shadow-2xl max-w-4xl mx-auto space-y-4">
-                <div className="flex items-center gap-2 border-b border-slate-800 pb-3 overflow-x-auto">
+              {/* UNCLUTTERED HERO SEARCH CONTAINER */}
+              <div className="max-w-3xl mx-auto space-y-3">
+                {/* Clean Tab Selector Pills */}
+                <div className="inline-flex items-center gap-1.5 bg-slate-950/80 p-1.5 rounded-2xl border border-slate-700/60 backdrop-blur-xl shadow-xl">
                   {['Buy', 'Rent', 'Shortlet', 'New Project'].map((tab) => (
                     <button
                       key={tab}
@@ -623,10 +611,10 @@ export default function App() {
                         setActiveTab(tab);
                         setSelectedTypeFilter('All');
                       }}
-                      className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all whitespace-nowrap ${
+                      className={`px-4 py-2 rounded-xl text-xs sm:text-sm font-bold transition-all whitespace-nowrap ${
                         activeTab === tab
                           ? 'bg-amber-500 text-slate-950 shadow-md shadow-amber-500/20'
-                          : 'text-slate-400 hover:text-white hover:bg-slate-800/50'
+                          : 'text-slate-300 hover:text-white hover:bg-slate-900/60'
                       }`}
                     >
                       {tab}
@@ -634,22 +622,23 @@ export default function App() {
                   ))}
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
-                  <div className="bg-slate-950/60 border border-slate-800 rounded-xl px-4 py-3 flex items-center gap-3">
-                    <span className="text-amber-400 text-lg">📍</span>
+                {/* Input Fields Row */}
+                <div className="bg-slate-900/90 border border-slate-700/70 rounded-2xl p-3 sm:p-4 backdrop-blur-xl shadow-2xl grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <div className="bg-slate-950/70 border border-slate-800 rounded-xl px-4 py-3 flex items-center gap-3">
+                    <span className="text-amber-400 text-base">📍</span>
                     <input
                       type="text"
-                      placeholder="Location (e.g. Ikoyi, Lekki, USA)"
+                      placeholder="Location (e.g. Ikoyi, Lekki)"
                       value={searchLocation}
                       onChange={(e) => setSearchLocation(e.target.value)}
-                      className="bg-transparent border-none text-sm text-white placeholder-slate-500 focus:outline-none w-full"
+                      className="bg-transparent border-none text-xs sm:text-sm text-white placeholder-slate-500 focus:outline-none w-full"
                     />
                   </div>
 
-                  <div className="bg-slate-950/60 border border-slate-800 rounded-xl px-4 py-3 flex items-center gap-3">
-                    <span className="text-amber-400 text-lg">🏡</span>
-                    <select className="bg-transparent border-none text-sm text-slate-300 focus:outline-none w-full cursor-pointer">
-                      <option value="" className="bg-slate-900">All Property Types</option>
+                  <div className="bg-slate-950/70 border border-slate-800 rounded-xl px-4 py-3 flex items-center gap-3">
+                    <span className="text-amber-400 text-base">🏡</span>
+                    <select className="bg-transparent border-none text-xs sm:text-sm text-slate-300 focus:outline-none w-full cursor-pointer">
+                      <option value="" className="bg-slate-900">Property Type</option>
                       <option value="apartment" className="bg-slate-900">Flats & Apartments</option>
                       <option value="house" className="bg-slate-900">Houses & Villas</option>
                       <option value="land" className="bg-slate-900">Lands & Plots</option>
@@ -657,7 +646,7 @@ export default function App() {
                     </select>
                   </div>
 
-                  <button className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-extrabold rounded-xl py-3 px-6 text-sm flex items-center justify-center gap-2">
+                  <button className="w-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-extrabold rounded-xl py-3 px-4 text-xs sm:text-sm flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20">
                     <span>🔍</span> Search Listings
                   </button>
                 </div>
@@ -1231,54 +1220,6 @@ export default function App() {
                 </button>
               </div>
             </div>
-          </div>
-        </div>
-      )}
-
-      {/* CLEAN AUTH / OTP MODAL */}
-      {authModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-          <div className="bg-slate-900 border border-slate-700 rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 relative shadow-2xl">
-            <button onClick={() => setAuthModalOpen(false)} className="absolute top-4 right-4 text-slate-400 hover:text-white">✕</button>
-
-            <div className="text-center space-y-1">
-              <span className="text-amber-400 font-bold text-xs uppercase tracking-widest">Platform Gateway</span>
-              <h2 className="text-2xl font-black text-white">Log In / Verification</h2>
-            </div>
-
-            {!otpSent ? (
-              <form onSubmit={(e) => { e.preventDefault(); setOtpSent(true); }} className="space-y-4">
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-300">Phone Number / WhatsApp</label>
-                  <input
-                    type="tel"
-                    required
-                    placeholder="+234 800 000 0000"
-                    value={userPhone}
-                    onChange={(e) => setUserPhone(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-amber-500"
-                  />
-                </div>
-                <button type="submit" className="w-full py-3 bg-amber-500 text-slate-950 font-bold text-xs rounded-xl hover:bg-amber-400">
-                  Send OTP Verification Code
-                </button>
-              </form>
-            ) : (
-              <form onSubmit={(e) => { e.preventDefault(); setUserRole('Verified Client'); setAuthModalOpen(false); setOtpSent(false); }} className="space-y-4">
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-300">Enter 4-Digit Security Code</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="1234"
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white text-center font-mono text-lg tracking-widest focus:outline-none focus:border-amber-500"
-                  />
-                </div>
-                <button type="submit" className="w-full py-3 bg-amber-500 text-slate-950 font-bold text-xs rounded-xl hover:bg-amber-400">
-                  Verify & Enter Platform
-                </button>
-              </form>
-            )}
           </div>
         </div>
       )}

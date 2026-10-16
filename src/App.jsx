@@ -95,6 +95,31 @@ const INITIAL_PROPERTIES = [
   }
 ];
 
+// Executive Services Database
+const EXECUTIVE_SERVICES = [
+  {
+    id: 'advisory',
+    icon: "🏛️",
+    title: "Property Advisory & Portfolio Management",
+    desc: "Institutional grade market valuations and yield analytics for high-net-worth investors.",
+    details: "Our wealth management team helps individuals analyze land appreciation potential, perform stress-tests against inflation, and structure optimized real estate portfolios across Lagos and US Sunbelt cities."
+  },
+  {
+    id: 'due-diligence',
+    icon: "📜",
+    title: "Legal Title & Due Diligence",
+    desc: "Rigorous verification of Governor's Consent, C of O, and land registry titles.",
+    details: "Avoid costly title litigation. We perform complete surveyor searches at the Lagos State Lands Bureau (Alausa), AGIS in Abuja, and county recorder offices in the US."
+  },
+  {
+    id: 'architecture',
+    icon: "🎨",
+    title: "Architectural Design & Renovation",
+    desc: "Bespoke furnishings and smart-home integration for modern residential estates.",
+    details: "Transform prime space into world-class luxury residences. We manage end-to-end architectural modernizations, solar energy grid integration, automated security systems, and high-end interior styling."
+  }
+];
+
 // Verified Realtors Directory
 const REALTORS_DIRECTORY = [
   {
@@ -105,8 +130,7 @@ const REALTORS_DIRECTORY = [
     rating: "5.0 ★★★★★ (42 reviews)",
     experience: "8 years experience",
     sales: "₦4.5B+ Closed Volume",
-    image: "/201887995792794157.jpg",
-    specialty: "High-Net-Worth Residential & Land Banking"
+    image: "/201887995792794157.jpg"
   },
   {
     id: 2,
@@ -116,8 +140,7 @@ const REALTORS_DIRECTORY = [
     rating: "4.9 ★★★★★ (38 reviews)",
     experience: "12 years experience",
     sales: "12 Prime Gated Estates",
-    image: "/666955026112680341.jpg",
-    specialty: "Off-Plan Joint Ventures & Waterfront Commercial"
+    image: "/666955026112680341.jpg"
   },
   {
     id: 3,
@@ -127,8 +150,7 @@ const REALTORS_DIRECTORY = [
     rating: "5.0 ★★★★★ (56 reviews)",
     experience: "10 years experience",
     sales: "30+ Foreign National Transactions",
-    image: "/Chinese Buyers Drive $56B Surge in US Housing___.jpg",
-    specialty: "Cross-Border Mortgages & Dollar Dividend Yields"
+    image: "/Chinese Buyers Drive $56B Surge in US Housing___.jpg"
   }
 ];
 
@@ -136,13 +158,8 @@ export default function App() {
   const [currency, setCurrency] = useState('NGN');
   const [activeTab, setActiveTab] = useState('Buy');
   const [activePage, setActivePage] = useState('Home');
-  const [selectedTypeFilter, setSelectedTypeFilter] = useState('All');
   const [searchLocation, setSearchLocation] = useState('');
   const [selectedProperty, setSelectedProperty] = useState(null);
-  const [savedProperties, setSavedProperties] = useState([]);
-  const [activeDropdown, setActiveDropdown] = useState(null);
-  
-  // Mobile Navigation Drawer Toggle State
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Authentication & Realtor.com Onboarding State
@@ -151,19 +168,14 @@ export default function App() {
   const [authViewMode, setAuthViewMode] = useState('consumer'); // 'consumer' | 'realtorPro'
   const [emailInput, setEmailInput] = useState('');
   const [proPhone, setProPhone] = useState('');
-  const [proPassword, setProPassword] = useState('');
 
-  // Structured Offer Negotiation Modal State
+  // Offer Negotiation & Financing Modals State
   const [negotiationProperty, setNegotiationProperty] = useState(null);
   const [offerAmount, setOfferAmount] = useState('');
-  const [offerTimeline, setOfferTimeline] = useState('30 Days');
-  const [negotiationSubmitted, setNegotiationSubmitted] = useState(false);
-
-  // Pre-Approved Financing Modal State
   const [financingModalOpen, setFinancingModalOpen] = useState(false);
   const [financingSubmitted, setFinancingSubmitted] = useState(false);
 
-  // Silva AI Chat Assistant State
+  // Silva AI Chat State
   const [chatOpen, setChatOpen] = useState(false);
   const [chatMessages, setChatMessages] = useState([
     { sender: 'ai', text: "Hello! Welcome to Silva Estate. I am Silva AI. Ask me about property prices, legal land titles, or finding top-rated agents!" }
@@ -178,7 +190,6 @@ export default function App() {
   const handleNavigation = (pageKey) => {
     setActivePage(pageKey);
     setMobileMenuOpen(false);
-    setActiveDropdown(null);
     setChatOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -193,24 +204,6 @@ export default function App() {
     }
   };
 
-  const handleConsumerAuth = (e) => {
-    e.preventDefault();
-    setUserRole('buyer');
-    setAuthModalOpen(false);
-  };
-
-  const handleProAgentAuth = (e) => {
-    e.preventDefault();
-    setUserRole('realtor');
-    setAuthModalOpen(false);
-  };
-
-  const triggerAdminLogin = () => {
-    setUserRole('admin');
-    setActivePage('AdminDashboard');
-    setAuthModalOpen(false);
-  };
-
   const handleSendMessage = (e) => {
     e.preventDefault();
     if (!chatInput.trim()) return;
@@ -220,15 +213,13 @@ export default function App() {
     setChatInput('');
 
     setTimeout(() => {
-      let aiResponse = "I can help you filter properties, calculate mortgage pre-approvals, or connect you with certified agents in Lagos and the USA.";
+      let aiResponse = "I can help you filter properties, calculate pre-approvals, or connect you with certified agents in Lagos and the USA.";
       const q = userText.toLowerCase().trim();
 
       if (q.includes('agent') || q.includes('realtor') || q.includes('find')) {
-        aiResponse = "You can browse our verified realtor directory under 'Find An Agent' in the top menu to view rating badges and closed sales volume.";
+        aiResponse = "You can browse our verified realtor directory under 'Find An Agent' in the top menu.";
       } else if (q.includes('ikoyi') || q.includes('lekki') || q.includes('lagos')) {
-        aiResponse = "We feature prime Lagos listings: Ultra-Modern Ikoyi Villa (₦850M) and Lekki Phase 1 Waterfront Estate (₦450M) with verified Governor's Consent titles.";
-      } else if (q.includes('c of o') || q.includes('title') || q.includes('legal')) {
-        aiResponse = "A C of O grants 99-year state land rights. On resales, Governor's Consent is strictly required. All Silva Estate listings undergo Alausa registry checks.";
+        aiResponse = "We feature prime Lagos listings: Ultra-Modern Ikoyi Villa (₦850M) and Lekki Phase 1 Waterfront Estate (₦450M).";
       }
 
       setChatMessages((prev) => [...prev, { sender: 'ai', text: aiResponse }]);
@@ -246,7 +237,7 @@ export default function App() {
   ];
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-amber-500 selection:text-slate-950 relative">
+    <div className="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-amber-500 selection:text-slate-950 relative flex flex-col justify-between">
       
       {/* TOP NAVBAR */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-slate-950/95 backdrop-blur-md border-b border-slate-800">
@@ -262,7 +253,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* Desktop Links */}
           <nav className="hidden lg:flex items-center gap-6 text-sm font-medium text-slate-300">
             {NAV_MENUS.map((menu) => (
               <button
@@ -303,7 +293,6 @@ export default function App() {
               </div>
             )}
 
-            {/* Mobile Hamburger Button */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden p-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-200 hover:text-amber-400"
@@ -313,9 +302,8 @@ export default function App() {
           </div>
         </div>
 
-        {/* Mobile Slide-down Drawer Fix */}
         {mobileMenuOpen && (
-          <div className="lg:hidden bg-slate-950 border-b border-slate-800 px-6 py-6 space-y-4 animate-in slide-in-from-top-2 duration-200">
+          <div className="lg:hidden bg-slate-950 border-b border-slate-800 px-6 py-6 space-y-4">
             <div className="space-y-3 border-b border-slate-800 pb-4">
               {NAV_MENUS.map((menu) => (
                 <button
@@ -327,10 +315,9 @@ export default function App() {
                 </button>
               ))}
             </div>
-
             <button
               onClick={() => { setFinancingModalOpen(true); setMobileMenuOpen(false); }}
-              className="w-full py-3 bg-slate-900 border border-slate-800 text-amber-400 font-bold text-xs rounded-xl text-center"
+              className="w-full py-3 bg-slate-900 border border-slate-800 text-amber-400 font-bold text-xs rounded-xl"
             >
               🔒 Pre-Approved Financing Gateway
             </button>
@@ -338,160 +325,234 @@ export default function App() {
         )}
       </header>
 
-      {/* HOME PAGE WITH HERO VIDEO */}
-      {activePage === 'Home' && (
-        <>
-          <section className="relative h-screen flex items-center justify-center overflow-hidden pt-20">
-            <video
-              autoPlay
-              loop
-              muted
-              playsInline
-              disablePictureInPicture
-              webkit-playsinline="true"
-              className="absolute inset-0 w-full h-full object-cover object-center z-0 scale-105"
-            >
-              <source src="/From Klickpin.com- 7740630605979018-pin-id-7740630605979018.mp4" type="video/mp4" />
-            </video>
+      {/* MAIN CONTENT AREA */}
+      <div className="flex-1">
+        {/* HOME VIEW */}
+        {activePage === 'Home' && (
+          <>
+            <section className="relative h-screen flex items-center justify-center overflow-hidden pt-20">
+              <video
+                autoPlay
+                loop
+                muted
+                playsInline
+                disablePictureInPicture
+                webkit-playsinline="true"
+                className="absolute inset-0 w-full h-full object-cover object-center z-0 scale-105"
+              >
+                <source src="/From Klickpin.com- 7740630605979018-pin-id-7740630605979018.mp4" type="video/mp4" />
+              </video>
 
-            <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/30 z-10" />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/60 to-slate-950/30 z-10" />
 
-            <div className="relative z-20 max-w-5xl mx-auto px-4 text-center space-y-8">
-              <div className="space-y-4">
-                <span className="inline-block px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold tracking-widest uppercase backdrop-blur-md">
-                  Nigeria & International Luxury Real Estate
-                </span>
-                <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-tight">
-                  Find Your Sanctuary Of <br />
-                  <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-amber-400 to-amber-500">
-                    Unrivaled Elegance
+              <div className="relative z-20 max-w-5xl mx-auto px-4 text-center space-y-8">
+                <div className="space-y-4">
+                  <span className="inline-block px-4 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-semibold tracking-widest uppercase backdrop-blur-md">
+                    Nigeria & International Luxury Real Estate
                   </span>
-                </h1>
-                <p className="text-slate-300 text-base sm:text-xl max-w-2xl mx-auto font-light">
-                  Explore premier residential villas, luxury shortlets, and prime commercial investments across Nigeria and the USA.
-                </p>
-              </div>
+                  <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight text-white leading-tight">
+                    Find Your Sanctuary Of <br />
+                    <span className="bg-clip-text text-transparent bg-gradient-to-r from-amber-200 via-amber-400 to-amber-500">
+                      Unrivaled Elegance
+                    </span>
+                  </h1>
+                </div>
 
-              <div className="bg-slate-900/80 border border-slate-700/60 rounded-2xl p-4 sm:p-6 backdrop-blur-xl shadow-2xl max-w-4xl mx-auto space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                  <div className="bg-slate-950/60 border border-slate-800 rounded-xl px-4 py-3 flex items-center gap-3">
-                    <span className="text-amber-400 text-lg">📍</span>
-                    <input
-                      type="text"
-                      placeholder="Location (e.g. Ikoyi, Lekki, USA)"
-                      value={searchLocation}
-                      onChange={(e) => setSearchLocation(e.target.value)}
-                      className="bg-transparent border-none text-sm text-white placeholder-slate-500 focus:outline-none w-full"
-                    />
+                <div className="bg-slate-900/80 border border-slate-700/60 rounded-2xl p-4 sm:p-6 backdrop-blur-xl shadow-2xl max-w-4xl mx-auto space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                    <div className="bg-slate-950/60 border border-slate-800 rounded-xl px-4 py-3 flex items-center gap-3">
+                      <span className="text-amber-400 text-lg">📍</span>
+                      <input
+                        type="text"
+                        placeholder="Location (e.g. Ikoyi, Lekki, USA)"
+                        value={searchLocation}
+                        onChange={(e) => setSearchLocation(e.target.value)}
+                        className="bg-transparent border-none text-sm text-white placeholder-slate-500 focus:outline-none w-full"
+                      />
+                    </div>
+
+                    <div className="bg-slate-950/60 border border-slate-800 rounded-xl px-4 py-3 flex items-center gap-3">
+                      <span className="text-amber-400 text-lg">🏡</span>
+                      <select className="bg-transparent border-none text-sm text-slate-300 focus:outline-none w-full cursor-pointer">
+                        <option value="" className="bg-slate-900">All Property Types</option>
+                        <option value="house" className="bg-slate-900">Houses & Villas</option>
+                        <option value="apartment" className="bg-slate-900">Flats & Apartments</option>
+                      </select>
+                    </div>
+
+                    <button 
+                      onClick={() => setFinancingModalOpen(true)}
+                      className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-extrabold rounded-xl py-3 px-6 text-xs flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20"
+                    >
+                      <span>🔒</span> Pre-Approved Financing
+                    </button>
                   </div>
-
-                  <div className="bg-slate-950/60 border border-slate-800 rounded-xl px-4 py-3 flex items-center gap-3">
-                    <span className="text-amber-400 text-lg">🏡</span>
-                    <select className="bg-transparent border-none text-sm text-slate-300 focus:outline-none w-full cursor-pointer">
-                      <option value="" className="bg-slate-900">All Property Types</option>
-                      <option value="house" className="bg-slate-900">Houses & Villas</option>
-                      <option value="apartment" className="bg-slate-900">Flats & Apartments</option>
-                      <option value="land" className="bg-slate-900">Lands & Plots</option>
-                    </select>
-                  </div>
-
-                  <button 
-                    onClick={() => setFinancingModalOpen(true)}
-                    className="w-full bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-extrabold rounded-xl py-3 px-6 text-xs flex items-center justify-center gap-2 shadow-lg shadow-amber-500/20"
-                  >
-                    <span>🔒</span> Pre-Approved Financing
-                  </button>
                 </div>
               </div>
-            </div>
-          </section>
+            </section>
 
-          <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-12">
-            <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-800 pb-6">
-              <div>
-                <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
-                  Featured Properties
-                </h2>
-                <p className="text-slate-400 text-sm mt-1">
-                  Curated luxury properties with verified documentation and real-world pricing.
-                </p>
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 space-y-12">
+              <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 border-b border-slate-800 pb-6">
+                <div>
+                  <h2 className="text-3xl sm:text-4xl font-extrabold text-white">
+                    Featured Properties
+                  </h2>
+                  <p className="text-slate-400 text-sm mt-1">
+                    Curated luxury properties with verified documentation and real-world pricing.
+                  </p>
+                </div>
               </div>
-              <div className="text-sm text-slate-400">
-                Showing <strong className="text-amber-400">{INITIAL_PROPERTIES.length}</strong> available listings
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {INITIAL_PROPERTIES.map((prop) => (
+                  <div key={prop.id} className="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden hover:border-amber-500/50 transition-all flex flex-col shadow-xl">
+                    <div className="relative h-64 overflow-hidden">
+                      <img src={prop.image} alt={prop.title} className="w-full h-full object-cover" />
+                      <div className="absolute bottom-4 left-4 text-white font-black text-2xl drop-shadow-md">
+                        {formatPrice(prop.priceNGN, prop.priceUSD)}
+                      </div>
+                    </div>
+
+                    <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                      <div className="space-y-1">
+                        <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider">{prop.type} • {prop.realtorName}</span>
+                        <h3 className="text-lg font-bold text-white">{prop.title}</h3>
+                        <p className="text-slate-400 text-xs">📍 {prop.location}</p>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 pt-2">
+                        <button onClick={() => setSelectedProperty(prop)} className="py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs rounded-xl">
+                          View Details
+                        </button>
+                        <button onClick={() => { setNegotiationProperty(prop); setOfferAmount(currency === 'NGN' ? prop.priceNGN : prop.priceUSD); }} className="py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs rounded-xl">
+                          Submit Offer
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
+            </section>
+          </>
+        )}
+
+        {/* PROPERTY LISTINGS PAGE */}
+        {(activePage === 'Buy' || activePage === 'Rent' || activePage === 'Shortlet' || activePage === 'Projects') && (
+          <section className="pt-32 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <div className="text-center space-y-4">
+              <span className="text-amber-400 font-bold text-xs uppercase tracking-widest">
+                Verified Properties • {activePage === 'Projects' ? 'New Projects' : activePage}
+              </span>
+              <h1 className="text-4xl sm:text-5xl font-black text-white">
+                {activePage === 'Buy' && 'Exclusive Properties For Sale'}
+                {activePage === 'Rent' && 'Luxury Residential & Commercial Rentals'}
+                {activePage === 'Shortlet' && 'Executive Serviced Vacation Suites'}
+                {activePage === 'Projects' && 'Master-Planned Off-Plan Developments'}
+              </h1>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-6">
               {INITIAL_PROPERTIES.map((prop) => (
                 <div key={prop.id} className="bg-slate-900/60 border border-slate-800 rounded-2xl overflow-hidden hover:border-amber-500/50 transition-all flex flex-col shadow-xl">
                   <div className="relative h-64 overflow-hidden">
                     <img src={prop.image} alt={prop.title} className="w-full h-full object-cover" />
-                    <div className="absolute bottom-4 left-4 text-white font-black text-2xl drop-shadow-md">
-                      {formatPrice(prop.priceNGN, prop.priceUSD)}
-                    </div>
+                    <div className="absolute bottom-4 left-4 text-white font-black text-2xl drop-shadow-md">{formatPrice(prop.priceNGN, prop.priceUSD)}</div>
                   </div>
-
                   <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
-                    <div className="space-y-1">
-                      <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider">{prop.type} • {prop.realtorName}</span>
-                      <h3 className="text-lg font-bold text-white">{prop.title}</h3>
+                    <div>
+                      <span className="text-xs font-semibold text-amber-400 uppercase tracking-wider">{prop.type}</span>
+                      <h3 className="text-lg font-bold text-white mt-1">{prop.title}</h3>
                       <p className="text-slate-400 text-xs">📍 {prop.location}</p>
                     </div>
-
-                    <div className="grid grid-cols-2 gap-2 pt-2">
-                      <button onClick={() => setSelectedProperty(prop)} className="py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-xs rounded-xl">
-                        View Details
-                      </button>
-                      <button onClick={() => { setNegotiationProperty(prop); setOfferAmount(currency === 'NGN' ? prop.priceNGN : prop.priceUSD); }} className="py-2.5 bg-amber-500 hover:bg-amber-400 text-slate-950 font-extrabold text-xs rounded-xl">
-                        Submit Offer
-                      </button>
-                    </div>
+                    <button onClick={() => { setNegotiationProperty(prop); setOfferAmount(currency === 'NGN' ? prop.priceNGN : prop.priceUSD); }} className="w-full py-2.5 bg-amber-500 text-slate-950 font-bold text-xs rounded-xl">
+                      Submit Formal Offer
+                    </button>
                   </div>
                 </div>
               ))}
             </div>
           </section>
-        </>
-      )}
+        )}
 
-      {/* REALTOR.COM STYLE FIND AN AGENT DIRECTORY PAGE */}
-      {activePage === 'FindAgent' && (
-        <section className="pt-32 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
-          <div className="text-center space-y-4">
-            <span className="text-amber-400 font-bold text-xs uppercase tracking-widest">Certified Broker Network</span>
-            <h1 className="text-4xl sm:text-5xl font-black text-white">Find A Local Real Estate Agent</h1>
-            <p className="text-slate-400 max-w-2xl mx-auto text-sm">
-              Connect with top-performing luxury realtors in Nigeria and international cross-border specialists.
-            </p>
-          </div>
+        {/* FIND AN AGENT DIRECTORY VIEW */}
+        {activePage === 'FindAgent' && (
+          <section className="pt-32 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <div className="text-center space-y-4">
+              <span className="text-amber-400 font-bold text-xs uppercase tracking-widest">Certified Broker Network</span>
+              <h1 className="text-4xl sm:text-5xl font-black text-white">Find A Local Real Estate Agent</h1>
+            </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6">
-            {REALTORS_DIRECTORY.map((agent) => (
-              <div key={agent.id} className="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4 text-center hover:border-amber-500/50 transition-all shadow-xl">
-                <img src={agent.image} alt={agent.name} className="w-24 h-24 rounded-full mx-auto object-cover border-2 border-amber-500" />
-                <div className="space-y-1">
-                  <h3 className="text-xl font-bold text-white">{agent.name}</h3>
-                  <p className="text-xs text-amber-400 font-bold">{agent.agency}</p>
-                  <p className="text-xs text-slate-400">📍 {agent.location}</p>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-6">
+              {REALTORS_DIRECTORY.map((agent) => (
+                <div key={agent.id} className="bg-slate-900 border border-slate-800 rounded-3xl p-6 space-y-4 text-center hover:border-amber-500/50 transition-all shadow-xl">
+                  <img src={agent.image} alt={agent.name} className="w-24 h-24 rounded-full mx-auto object-cover border-2 border-amber-500" />
+                  <div className="space-y-1">
+                    <h3 className="text-xl font-bold text-white">{agent.name}</h3>
+                    <p className="text-xs text-amber-400 font-bold">{agent.agency}</p>
+                  </div>
+                  <button onClick={() => { setAuthViewMode('consumer'); setAuthModalOpen(true); }} className="w-full py-3 bg-amber-500 text-slate-950 font-bold text-xs rounded-xl hover:bg-amber-400">
+                    Contact Agent
+                  </button>
                 </div>
-                <div className="bg-slate-950 p-3 rounded-2xl border border-slate-800 space-y-1 text-xs">
-                  <div className="text-amber-400 font-bold">{agent.rating}</div>
-                  <div className="text-slate-300">{agent.experience} • {agent.sales}</div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* SERVICES PAGE */}
+        {activePage === 'Services' && (
+          <section className="pt-32 pb-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+            <div className="text-center space-y-4">
+              <span className="text-amber-400 font-bold text-xs uppercase tracking-widest">Bespoke Real Estate Solutions</span>
+              <h1 className="text-4xl sm:text-5xl font-black text-white">Our Executive Services</h1>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 pt-8">
+              {EXECUTIVE_SERVICES.map((srv) => (
+                <div key={srv.id} className="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                  <div className="text-4xl">{srv.icon}</div>
+                  <h3 className="text-xl font-bold text-white">{srv.title}</h3>
+                  <p className="text-slate-400 text-xs leading-relaxed">{srv.desc}</p>
                 </div>
-                <button onClick={() => { setAuthViewMode('consumer'); setAuthModalOpen(true); }} className="w-full py-3 bg-amber-500 text-slate-950 font-bold text-xs rounded-xl hover:bg-amber-400">
-                  Contact Agent
-                </button>
+              ))}
+            </div>
+          </section>
+        )}
+      </div>
+
+      {/* FULL LUXURY FOOTER RESTORED */}
+      <footer className="bg-slate-950 border-t border-slate-800/80 pt-16 pb-12 mt-20">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8 text-xs">
+            {NAV_MENUS.map((menu) => (
+              <div key={menu.title} className="space-y-3">
+                <h4 className="text-amber-400 font-extrabold uppercase tracking-wider text-sm">{menu.title}</h4>
+                <ul className="space-y-2 text-slate-400">
+                  <li><button onClick={() => handleNavigation(menu.pageKey)} className="hover:text-white transition-colors text-left">Overview</button></li>
+                  <li><button onClick={() => handleNavigation(menu.pageKey)} className="hover:text-white transition-colors text-left">Featured Listings</button></li>
+                  <li><button onClick={() => handleNavigation(menu.pageKey)} className="hover:text-white transition-colors text-left">Verified Advisory</button></li>
+                </ul>
               </div>
             ))}
           </div>
-        </section>
-      )}
 
-      {/* REALTOR.COM STYLE AUTHENTICATION MODAL */}
+          <div className="border-t border-slate-800/80 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-slate-500 text-xs">
+            <div className="flex items-center gap-2">
+              <span className="font-extrabold text-white">SILVA ESTATE</span>
+              <span>© {new Date().getFullYear()} Silva Estate Technologies Ltd. All rights reserved.</span>
+            </div>
+            <div className="flex gap-4">
+              <button className="hover:text-slate-300">Privacy Policy</button>
+              <button className="hover:text-slate-300">Terms of Service</button>
+              <button className="hover:text-slate-300">Land Title Registry Verification</button>
+            </div>
+          </div>
+        </div>
+      </footer>
+
+      {/* CONSUMER / REALTOR.COM LOG IN MODAL WITH SVG BRAND LOGOS */}
       {authModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
           {authViewMode === 'consumer' ? (
-            /* Consumer Log In or Create Account Modal (Image 3) */
             <div className="bg-slate-900 border border-slate-700 rounded-3xl max-w-md w-full p-6 sm:p-8 space-y-6 relative shadow-2xl">
               <button onClick={() => setAuthModalOpen(false)} className="absolute top-4 right-4 text-slate-400 hover:text-white">✕</button>
 
@@ -500,7 +561,7 @@ export default function App() {
                 <p className="text-xs text-slate-400">Access saved searches and direct realtor messaging.</p>
               </div>
 
-              <form onSubmit={handleConsumerAuth} className="space-y-3">
+              <form onSubmit={(e) => { e.preventDefault(); setUserRole('buyer'); setAuthModalOpen(false); }} className="space-y-3">
                 <div className="space-y-1">
                   <label className="text-xs font-semibold text-slate-300">Email address <span className="text-red-400">*</span></label>
                   <input
@@ -524,15 +585,26 @@ export default function App() {
               </div>
 
               <div className="space-y-2">
-                <button onClick={() => setUserRole('buyer')} className="w-full py-2.5 bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-200 font-semibold text-xs rounded-xl flex items-center justify-center gap-2">
-                  <span>🌐</span> Continue with Google
+                {/* SVG Google Vector Icon */}
+                <button onClick={() => { setUserRole('buyer'); setAuthModalOpen(false); }} className="w-full py-2.5 bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-200 font-semibold text-xs rounded-xl flex items-center justify-center gap-3 transition-colors">
+                  <svg className="w-4 h-4" viewBox="0 0 24 24">
+                    <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                    <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                    <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                    <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                  </svg>
+                  <span>Continue with Google</span>
                 </button>
-                <button onClick={() => setUserRole('buyer')} className="w-full py-2.5 bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-200 font-semibold text-xs rounded-xl flex items-center justify-center gap-2">
-                  <span>🍎</span> Continue with Apple
+
+                {/* SVG Apple Vector Icon */}
+                <button onClick={() => { setUserRole('buyer'); setAuthModalOpen(false); }} className="w-full py-2.5 bg-slate-950 border border-slate-800 hover:border-slate-700 text-slate-200 font-semibold text-xs rounded-xl flex items-center justify-center gap-3 transition-colors">
+                  <svg className="w-4 h-4 fill-current text-white" viewBox="0 0 170 170">
+                    <path d="M150.37 130.25c-2.45 5.66-5.35 10.87-8.71 15.66-4.58 6.53-8.33 11.05-11.22 13.56-4.48 4.12-9.28 6.23-14.42 6.35-3.69 0-8.14-1.05-13.32-3.18-5.19-2.12-9.97-3.17-14.34-3.17-4.58 0-9.49 1.05-14.75 3.17-5.26 2.13-9.5 3.24-12.74 3.35-4.34.13-9.16-1.9-14.49-6.08-3.32-2.65-7.25-7.3-11.8-13.97-6.12-8.91-11.07-18.9-14.85-29.98-3.78-11.07-5.68-21.72-5.68-31.94 0-12.28 3.03-22.56 9.1-30.82 6.07-8.27 13.88-12.49 23.42-12.67 4.5 0 9.53 1.14 15.09 3.41 5.56 2.28 9.29 3.42 11.2 3.42 1.58 0 5.42-1.2 11.52-3.6 6.1-2.4 11.2-3.52 15.3-3.37 10.07.44 18.01 4.28 23.82 11.52-9.15 5.56-13.62 13.4-13.4 23.52.22 7.84 3.19 14.48 8.91 19.92 5.72 5.44 12.63 8.64 20.73 9.6-1.2 3.65-2.73 7.6-4.58 11.86zm-30.34-110.3c0 6.1-2.26 11.83-6.78 17.18-5.18 6.07-11.64 9.58-19.38 10.53-.18-1.03-.27-1.99-.27-2.88 0-5.88 2.37-11.64 7.11-17.27 4.74-5.63 11.1-9.13 19.08-10.5 0 .97.24 1.95.24 2.94z"/>
+                  </svg>
+                  <span>Continue with Apple</span>
                 </button>
               </div>
 
-              {/* Link to PRO Agent Onboarding */}
               <div className="pt-4 border-t border-slate-800 text-center space-y-1">
                 <p className="text-xs text-slate-400">Are you a real estate agent?</p>
                 <button
@@ -544,92 +616,31 @@ export default function App() {
               </div>
             </div>
           ) : (
-            /* Realtor.com PRO Agent Onboarding View (Image 4) */
-            <div className="bg-slate-900 border border-slate-700 rounded-3xl max-w-4xl w-full overflow-hidden relative shadow-2xl grid grid-cols-1 md:grid-cols-2">
-              <button onClick={() => setAuthModalOpen(false)} className="absolute top-4 right-4 z-10 text-slate-400 hover:text-white">✕</button>
+            <div className="bg-slate-900 border border-slate-700 rounded-3xl max-w-2xl w-full p-6 space-y-6 relative shadow-2xl">
+              <button onClick={() => setAuthModalOpen(false)} className="absolute top-4 right-4 text-slate-400 hover:text-white">✕</button>
 
-              {/* Left Value Proposition Side */}
-              <div className="p-8 bg-slate-950 space-y-6 flex flex-col justify-between border-b md:border-b-0 md:border-r border-slate-800">
-                <div>
-                  <div className="inline-block px-3 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-400 font-bold text-xs rounded-full uppercase tracking-wider mb-3">
-                    Silva Estate PRO
-                  </div>
-                  <h3 className="text-2xl font-black text-white leading-tight">
-                    Your Realtor PRO account allows you to:
-                  </h3>
-                </div>
+              <div className="space-y-1">
+                <span className="text-amber-400 font-bold text-xs uppercase tracking-widest">Silva Estate PRO</span>
+                <h2 className="text-2xl font-black text-white">Create your PRO Realtor Account</h2>
+              </div>
 
-                <div className="space-y-4 text-xs">
-                  <div className="flex items-start gap-3">
-                    <span className="text-amber-400 text-xl">👤</span>
-                    <div>
-                      <h4 className="font-bold text-white">Claim your FREE agent profile</h4>
-                      <p className="text-slate-400">Create an account to show up when buyers and sellers look for an agent.</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <span className="text-amber-400 text-xl">💬</span>
-                    <div>
-                      <h4 className="font-bold text-white">Generate and manage leads</h4>
-                      <p className="text-slate-400">Connect with motivated buyers visiting Silva Estate looking for verified agents.</p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <span className="text-amber-400 text-xl">📢</span>
-                    <div>
-                      <h4 className="font-bold text-white">Build your brand</h4>
-                      <p className="text-slate-400">Increase visibility across Lagos and international markets with verified badges.</p>
-                    </div>
-                  </div>
-                </div>
-
-                <button onClick={() => setAuthViewMode('consumer')} className="text-slate-400 hover:text-white text-xs text-left">
-                  ← Back to Consumer Sign In
+              <form onSubmit={(e) => { e.preventDefault(); setUserRole('realtor'); setAuthModalOpen(false); }} className="space-y-3">
+                <input type="tel" required placeholder="Phone number" value={proPhone} onChange={(e) => setProPhone(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-amber-500" />
+                <input type="email" required placeholder="Email address" value={emailInput} onChange={(e) => setEmailInput(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-amber-500" />
+                <button type="submit" className="w-full py-3 bg-amber-500 text-slate-950 font-bold text-xs rounded-xl hover:bg-amber-400">
+                  Create Agent PRO Account
                 </button>
-              </div>
+              </form>
 
-              {/* Right Agent Registration Form Side */}
-              <div className="p-8 space-y-6 flex flex-col justify-center">
-                <div>
-                  <h3 className="text-xl font-bold text-white">Create your PRO account</h3>
-                  <p className="text-xs text-slate-400">Join our verified broker marketplace network.</p>
-                </div>
-
-                <form onSubmit={handleProAgentAuth} className="space-y-3">
-                  <div className="space-y-1">
-                    <label className="text-xs font-semibold text-slate-300">Phone number <span className="text-red-400">*</span></label>
-                    <input type="tel" required placeholder="+234 800 000 0000" value={proPhone} onChange={(e) => setProPhone(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-amber-500" />
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="text-xs font-semibold text-slate-300">Email address <span className="text-red-400">*</span></label>
-                    <input type="email" required placeholder="agent@realty.com" value={emailInput} onChange={(e) => setEmailInput(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-amber-500" />
-                  </div>
-
-                  <div className="space-y-1">
-                    <label className="text-xs font-semibold text-slate-300">Password <span className="text-red-400">*</span></label>
-                    <input type="password" required placeholder="••••••••" value={proPassword} onChange={(e) => setProPassword(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-amber-500" />
-                  </div>
-
-                  <button type="submit" className="w-full py-3.5 bg-amber-500 text-slate-950 font-bold text-xs rounded-xl hover:bg-amber-400">
-                    Create Agent PRO Account
-                  </button>
-                </form>
-
-                <div className="text-center pt-2">
-                  <button onClick={triggerAdminLogin} className="text-[10px] text-slate-600 hover:text-slate-400">
-                    🔒 Developer Authorization Gateway
-                  </button>
-                </div>
-              </div>
+              <button onClick={() => setAuthViewMode('consumer')} className="text-xs text-slate-400 hover:text-white">
+                ← Back to Consumer Sign In
+              </button>
             </div>
           )}
         </div>
       )}
 
-      {/* FORMAL STRUCTURED OFFER MODAL */}
+      {/* FORMAL COUNTER-OFFER MODAL */}
       {negotiationProperty && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
           <div className="bg-slate-900 border border-slate-700 rounded-3xl max-w-lg w-full p-6 space-y-6 relative shadow-2xl">
@@ -638,11 +649,8 @@ export default function App() {
               <span className="text-amber-400 font-bold text-xs uppercase tracking-widest">Safe On-Platform Deal Desk</span>
               <h2 className="text-2xl font-black text-white">{negotiationProperty.title}</h2>
             </div>
-            <form onSubmit={(e) => { e.preventDefault(); setNegotiationSubmitted(true); }} className="space-y-4">
-              <div className="space-y-1">
-                <label className="text-xs text-slate-300">Offer Amount ({currency})</label>
-                <input type="number" required value={offerAmount} onChange={(e) => setOfferAmount(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white" />
-              </div>
+            <form onSubmit={(e) => { e.preventDefault(); setNegotiationProperty(null); }} className="space-y-4">
+              <input type="number" required value={offerAmount} onChange={(e) => setOfferAmount(e.target.value)} className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-white" />
               <button type="submit" className="w-full py-3 bg-amber-500 text-slate-950 font-bold text-xs rounded-xl">
                 Submit Formal Counter-Offer
               </button>

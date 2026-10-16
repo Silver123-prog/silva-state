@@ -1,0 +1,22 @@
+silva-state/
+│
+├── client/                      <-- (Move your existing React files here)
+│   ├── src/
+│   │   ├── App.jsx
+│   │   ├── components/
+│   │   │   └── DirectChatWidget.jsx   <-- (Put your React Frontend Chat Code here)
+│   │   └── main.jsx
+│   └── package.json
+│
+└── server/                      <-- (NEW Backend Folder)
+    ├── config/
+    │   └── db.js                <-- Database connection file
+    ├── middleware/
+    │   └── authMiddleware.js    <-- Put your Express JWT Auth code here
+    ├── routes/
+    │   ├── authRoutes.js        <-- Login, Register & OTP routes
+    │   ├── listingRoutes.js     <-- Listing CRUD & Monetization routes
+    │   └── chatRoutes.js        <-- In-app messaging history
+    ├── server.js                <-- Put your Express + Socket.io Server code here
+    ├── .env                     <-- Environment variables (API keys, DB URLs)
+    └── package.json
